@@ -25,3 +25,9 @@ yarn install:challenges
 ```
 yarn dev
 ```
+
+5. Test a challenge submission for token wrapper weth at the following endpoint
+
+```
+localhost:3000/0/sepolia/0xC7A49f9D6A7AcD951f604e7838C51B451b5244f2
+```

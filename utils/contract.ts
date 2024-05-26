@@ -1,29 +1,27 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import axios from "axios";
-import { allowedNetworks, ETHERSCAN_API_KEY } from "./config";
-import { isAddress } from "viem";
+import { ETHERSCAN_API_KEY } from "./config";
 import { type SubmissionConfig } from "../types";
 import fs from "fs";
 
-const copyContractFromEtherscan = async ({
+/**
+ * 1. Fetch the contract source code from Etherscan
+ * 2. Save the contract source code into the appropriate challenge directory
+ */
+export const downloadContract = async ({
   challenge,
   network,
   address,
-}: SubmissionConfig) => {
-  if (!allowedNetworks.includes(network)) {
-    throw new Error(`${network} is not a valid testnet`);
-  }
-
+}: SubmissionConfig): Promise<boolean> => {
   const API_URL = `https://api-${network}.etherscan.io/api`;
   const paramString = `?module=contract&action=getsourcecode&address=${address}&apikey=${ETHERSCAN_API_KEY}`;
 
   let sourceCodeParsed;
   try {
+    console.log(`📡 Downloading contract from ${network}`);
     const response = await axios.get(API_URL + paramString);
     // The Etherscan API returns OK / NOTOK
     if (response.data.message !== "OK") {
+      console.log(response.data);
       return false;
     }
 
@@ -42,7 +40,6 @@ const copyContractFromEtherscan = async ({
       // Option 3. A valid JSON
       const parsedJson = JSON.parse(sourceCode);
       sourceCodeParsed = parsedJson?.[`${challenge.contractName}.sol`]?.content;
-      console.log();
     } catch (e) {
       if (sourceCode.slice(0, 1) === "{") {
         // Option 2. An almost valid JSON
@@ -67,34 +64,12 @@ const copyContractFromEtherscan = async ({
     }
 
     const path = `${challenge.name}/packages/foundry/contracts/download-${address}.sol`;
-
     fs.writeFileSync(path, sourceCodeParsed);
-
+    console.log(`📝 Contract saved at ${path}`);
     return true;
   } catch (e) {
     // Issue with the Request.
     console.error(e);
-    throw e;
-  }
-};
-
-export const downloadAndTestContract = async ({
-  challenge,
-  network,
-  address,
-}: SubmissionConfig) => {
-  // Validate the submission config
-  if (!isAddress(address)) {
-    throw new Error(`${address} is not a valid address.`);
-  }
-  if (!allowedNetworks.includes(network)) {
-    throw new Error(`"${network}" is not a valid testnet.`);
-  }
-
-  try {
-    console.log(`📡 Downloading contract from ${network}`);
-    copyContractFromEtherscan({ challenge, network, address });
-  } catch (e) {
     throw e;
   }
 };
