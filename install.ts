@@ -2,16 +2,8 @@ import * as fs from "fs/promises";
 import { exec as execCb } from "child_process";
 import { promisify } from "util";
 const exec = promisify(execCb);
-
-interface Challenge {
-  name: string;
-  github: string;
-}
-
-const fetchChallenges = async (): Promise<Challenge[]> => {
-  const data = await fs.readFile("challenges.json", { encoding: "utf8" });
-  return JSON.parse(data);
-};
+import { fetchChallenges } from "./utils/helpers";
+import { type Challenge } from "./types";
 
 async function executeCommand(command: string): Promise<void> {
   const { stdout, stderr } = await exec(command);

@@ -1,5 +1,6 @@
 [
   {
+    "id": 0,
     "type": "challenge",
     "level": 1,
     "name": "token-wrapper-weth",
