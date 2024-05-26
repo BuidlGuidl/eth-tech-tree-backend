@@ -1,4 +1,4 @@
-export type Challenge = {
+export interface Challenge {
   id: number;
   type: string;
   level: number;
@@ -9,4 +9,10 @@ export type Challenge = {
   contractName: string;
   testFileName: string;
   tags: string[];
-};
+}
+
+export interface SubmissionConfig {
+  challenge: Challenge;
+  network: string;
+  address: string;
+}

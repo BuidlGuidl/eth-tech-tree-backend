@@ -1,17 +1,6 @@
 import * as fs from "fs/promises";
-import { exec as execCb } from "child_process";
-import { promisify } from "util";
-const exec = promisify(execCb);
-import { fetchChallenges } from "./utils/helpers";
+import { fetchChallenges, executeCommand } from "./utils/";
 import { type Challenge } from "./types";
-
-async function executeCommand(command: string): Promise<void> {
-  const { stdout, stderr } = await exec(command);
-  if (stderr) {
-    console.error(`stderr: ${stderr}\n`);
-  }
-  console.log(`stdout: ${stdout}\n`);
-}
 
 const setupChallenge = async (challenge: Challenge): Promise<void> => {
   try {

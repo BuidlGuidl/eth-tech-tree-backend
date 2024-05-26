@@ -3,7 +3,7 @@ import https from "https";
 import fs from "fs";
 import cors from "cors";
 import dotenv from "dotenv";
-import { fetchChallenges } from "./utils/helpers";
+import { downloadAndTestContract, fetchChallenge } from "./utils";
 
 dotenv.config();
 
@@ -25,21 +25,30 @@ export const startServer = async () => {
    */
   app.get("/:challengeId/:network/:address", async function (req, res) {
     console.log("GET /:challengeId/:network/:address \n", req.params);
-    const { challengeId, network, address } = req.params;
-    const challenges = await fetchChallenges();
-    const challenge = challenges[challengeId as keyof typeof challenges];
+    const { network, address } = req.params;
+    const challengeId = +req.params.challengeId;
 
-    // 1. Execute logic to download and test the submitted contract
+    try {
+      // 1. Fetch challenge metadata using the challengeId
+      const challenge = await fetchChallenge(challengeId);
 
-    // 2. If the test passes, save the test results to a database
+      // 2. Execute logic to download and test the submitted contract
+      downloadAndTestContract({ challenge, network, address });
 
-    // 3. Return some response to the client
+      // 3. If the test passes, save the test results to a database
 
-    return res.json({
-      network,
-      address,
-      challenge,
-    });
+      // 4. Return some response to the client
+
+      return res.json({
+        network,
+        address,
+      });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({
+        error: "An unexpected error occurred",
+      });
+    }
   });
 
   // Start server

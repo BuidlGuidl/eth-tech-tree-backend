@@ -12,13 +12,15 @@ cd eth-tech-tree-backend
 yarn install
 ```
 
-2. Install challenge folders where tests will be executed
+2. Copy `.env.example` to `.env` and put in your [Etherscan API Key](https://etherscan.io/apis).
+
+3. Install challenge folders where tests will be executed
 
 ```
 yarn install:challenges
 ```
 
-3. Start the server at `localhost:3000`
+4. Start the server at `localhost:3000`
 
 ```
 yarn dev
