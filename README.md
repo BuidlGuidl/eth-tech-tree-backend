@@ -4,25 +4,21 @@ This express server application is used to grade submitted challenges from the E
 
 ## Getting Started
 
-1. Download the repo
+1. Download repo & install dependencies
 
 ```
 git clone https://github.com/BuidlGuidl/eth-tech-tree-backend.git
-```
-
-2. Install dependencies
-
-```
+cd eth-tech-tree-backend
 yarn install
 ```
 
-3. Install challenge folders where tests will be executed
+2. Install challenge folders where tests will be executed
 
 ```
 yarn install:challenges
 ```
 
-4. Start the server at `localhost:3000`
+3. Start the server at `localhost:3000`
 
 ```
 yarn dev
