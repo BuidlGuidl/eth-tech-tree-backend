@@ -61,7 +61,7 @@ export const downloadContract = async (
       );
     }
 
-    const path = `${challenge.name}/packages/foundry/contracts/download-${address}.sol`;
+    const path = `challenges/${challenge.name}/packages/foundry/contracts/download-${address}.sol`;
     fs.writeFileSync(path, sourceCodeParsed);
     console.log(`📝 Contract saved at ${path}`);
   } catch (e) {
@@ -72,15 +72,16 @@ export const downloadContract = async (
 
 /**
  * Run the test from within the challenge repo against the downloaded contract
+ * Delete the downloaded contract after testing so we dont have the prod server stacking up files with each submission
  */
 export const testChallengeSubmission = async (config: SubmissionConfig) => {
   const { challenge, address } = config;
 
   try {
     console.log("🧪 Testing challenge submission...");
-    const testCommand = `cd ${challenge.name} && yarn foundry:test`;
+    const testCommand = `cd challenges/${challenge.name} && yarn foundry:test`;
     const { stdout } = await execute(testCommand);
-    const removeContractCommand = `rm -f ${challenge.name}/packages/foundry/contracts/download-${address}.sol`;
+    const removeContractCommand = `rm -f challenges/${challenge.name}/packages/foundry/contracts/download-${address}.sol`;
     execute(removeContractCommand);
     return stdout;
   } catch (e) {

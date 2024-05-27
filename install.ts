@@ -1,10 +1,11 @@
 import * as fs from "fs/promises";
 import { fetchChallenges, execute } from "./utils/";
 import { type Challenge } from "./types";
-import { exec as execCb } from "child_process";
-import { promisify } from "util";
-const exec = promisify(execCb);
 
+/**
+ * This script clones all the branches from the eth-tech-tree-challenges repo and installs the dependencies
+ * Each branch is cloned into the `challenges/` directory of this repo
+ */
 const setupChallenge = async (challenge: Challenge): Promise<void> => {
   try {
     const path = `./${challenge.name}`;
@@ -15,12 +16,13 @@ const setupChallenge = async (challenge: Challenge): Promise<void> => {
 
     if (!exists) {
       console.log(`👯...CLONING ${challenge.name}...👯`);
-      const cloneBranchCommand = `git clone -b ${challenge.name} ${challenge.github} ${challenge.name}`;
+      const cloneBranchCommand = `git clone -b ${challenge.name} ${challenge.github} challenges/${challenge.name}`;
       await execute(cloneBranchCommand);
     }
 
     console.log(`🛠️...UPDATING ${challenge.name}...🛠️`);
-    const updateChallengeCommand = `cd ${challenge.name} && git pull && yarn install`;
+    // w/o the `forge install` the submodules won't be installed for some reason
+    const updateChallengeCommand = `cd challenges/${challenge.name} && git pull && yarn install && cd packages/foundry && forge install`;
     await execute(updateChallengeCommand);
   } catch (e) {
     console.error(e);
