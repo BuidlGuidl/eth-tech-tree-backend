@@ -1,6 +1,9 @@
 import * as fs from "fs/promises";
-import { fetchChallenges, executeCommand } from "./utils/";
+import { fetchChallenges, execute } from "./utils/";
 import { type Challenge } from "./types";
+import { exec as execCb } from "child_process";
+import { promisify } from "util";
+const exec = promisify(execCb);
 
 const setupChallenge = async (challenge: Challenge): Promise<void> => {
   try {
@@ -12,13 +15,13 @@ const setupChallenge = async (challenge: Challenge): Promise<void> => {
 
     if (!exists) {
       console.log(`👯...CLONING ${challenge.name}...👯`);
-      const cloneBranch = `git clone -b ${challenge.name} ${challenge.github} ${challenge.name}`;
-      await executeCommand(cloneBranch);
+      const cloneBranchCommand = `git clone -b ${challenge.name} ${challenge.github} ${challenge.name}`;
+      await execute(cloneBranchCommand);
     }
 
     console.log(`🛠️...UPDATING ${challenge.name}...🛠️`);
-    const updateChallenge = `cd ${challenge.name} && git pull && yarn install`;
-    await executeCommand(updateChallenge);
+    const updateChallengeCommand = `cd ${challenge.name} && git pull && yarn install`;
+    await execute(updateChallengeCommand);
   } catch (e) {
     console.error(e);
   }

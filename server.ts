@@ -3,7 +3,12 @@ import https from "https";
 import fs from "fs";
 import cors from "cors";
 import dotenv from "dotenv";
-import { downloadContract, fetchChallenge, validateSubmission } from "./utils";
+import {
+  validateSubmission,
+  fetchChallenge,
+  downloadContract,
+  testChallengeSubmission,
+} from "./utils";
 
 dotenv.config();
 
@@ -20,8 +25,10 @@ export const startServer = async () => {
   });
 
   /**
-   * The challenge submission route
-   * Temp setup as a GET to save us effort of firing POST requests during development
+   * Challenge submission route temp setup as a GET to save us effort of firing POST requests during development
+   * 1. Fetch the contract source code from Etherscan and save it into challenge repo
+   * 2. Run the test from within the challenge repo against the downloaded contract
+   * 3. Return the results
    */
   app.get(
     "/:challengeId/:network/:address",
@@ -31,31 +38,18 @@ export const startServer = async () => {
       const { network, address } = req.params;
       const challengeId = +req.params.challengeId; // convert to number
       try {
-        // 1. Fetch challenge metadata using the challengeId
         const challenge = await fetchChallenge(challengeId);
-        // 2. Download the source code for the contract from etherescan
-        const isSuccess = await downloadContract({
-          challenge,
-          network,
-          address,
-        });
-        if (!isSuccess) {
-          return res.status(400).json({
-            message: "Failed to download the contract from Etherscan",
-          });
-        }
-        // 3. Run the test from challenge repo against the downloaded contract
-        // 4. If the test passes, save the test results to a database
-        // 5. Return some response to the client
-        return res.json({
-          network,
-          address,
-        });
+        const submissionConfig = { challenge, network, address };
+        await downloadContract(submissionConfig);
+        const result = await testChallengeSubmission(submissionConfig);
+        return res.json({ result });
       } catch (e) {
         console.error(e);
-        return res.status(500).json({
-          error: "An unexpected error occurred",
-        });
+        if (e instanceof Error) {
+          return res.status(500).json({ error: e.message });
+        } else {
+          return res.status(500).json({ error: "Unexpected error occurred" });
+        }
       }
     }
   );
