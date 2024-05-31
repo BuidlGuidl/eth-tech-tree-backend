@@ -1,5 +1,5 @@
 import * as fs from "fs/promises";
-import { fetchChallenges, execute } from "./utils/";
+import { fetchChallenges, execute } from "./utils";
 import { type Challenge } from "./types";
 
 /**
