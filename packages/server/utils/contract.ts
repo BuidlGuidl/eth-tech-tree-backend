@@ -60,9 +60,9 @@ export const downloadContract = async (
         `Contract Source Code is not valid. Are you submitting ${challenge.contractName}.sol Contract Address?`
       );
     }
-
-    const path = `challenges/${challenge.name}/packages/foundry/contracts/download-${address}.sol`;
-    fs.writeFileSync(path, sourceCodeParsed);
+    const path = `${__dirname}/../challenges/${challenge.name}`;
+    const contractPath = `${path}/packages/foundry/contracts/download-${address}.sol`;
+    fs.writeFileSync(contractPath, sourceCodeParsed);
     console.log(`📝 Contract saved at ${path}`);
   } catch (e) {
     console.error(e);
@@ -79,9 +79,10 @@ export const testChallengeSubmission = async (config: SubmissionConfig) => {
 
   try {
     console.log("🧪 Testing challenge submission...");
-    const testCommand = `cd challenges/${challenge.name} && yarn foundry:test`;
+    const path = `${__dirname}/../challenges/${challenge.name}`;
+    const testCommand = `cd ${path} && yarn foundry:test`;
     const { stdout } = await execute(testCommand);
-    const removeContractCommand = `rm -f challenges/${challenge.name}/packages/foundry/contracts/download-${address}.sol`;
+    const removeContractCommand = `rm -f ${path}/packages/foundry/contracts/download-${address}.sol`;
     execute(removeContractCommand);
     return stdout;
   } catch (e) {
