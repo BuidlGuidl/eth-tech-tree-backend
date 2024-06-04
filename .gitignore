@@ -1,4 +1,13 @@
-node_modules
 .env
-dist
-challenges
+node_modules
+.vscode/**
+.DS_Store
+
+# yarn / eslint
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.eslintcache
