@@ -1,5 +1,5 @@
 {
-  "name": "@ett-backend/local_db",
+  "name": "@ett-backend/firebase",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

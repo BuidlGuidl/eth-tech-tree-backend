@@ -200,9 +200,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ett-backend/local_db@workspace:packages/local_db":
+"@ett-backend/firebase@workspace:packages/firebase":
   version: 0.0.0-use.local
-  resolution: "@ett-backend/local_db@workspace:packages/local_db"
+  resolution: "@ett-backend/firebase@workspace:packages/firebase"
   dependencies:
     "@types/node": ^20.12.12
     dotenv: ^16.4.5
