@@ -7,10 +7,8 @@ import {
   fetchChallenge,
   downloadContract,
   testChallengeSubmission,
+  PORT
 } from "./utils";
-import { PORT } from "./utils";
-
-const port = PORT;
 
 export const startServer = async () => {
   const app: Express = express();
@@ -62,12 +60,12 @@ export const startServer = async () => {
         },
         app
       )
-      .listen(port, () => {
-        console.log(`[server]: Server is running at http://localhost:${port}`);
+      .listen(PORT, () => {
+        console.log(`[server]: Server is running at http://localhost:${PORT}`);
       });
   } else {
-    app.listen(port, () => {
-      console.log(`[server]: Server is running at http://localhost:${port}`);
+    app.listen(PORT, () => {
+      console.log(`[server]: Server is running at http://localhost:${PORT}`);
     });
   }
 };
