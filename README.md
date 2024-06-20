@@ -25,7 +25,7 @@ Before you begin, you need to install the following tools:
 
     You will need to set up an [Etherscan API Key](https://etherscan.io/apis).
 
-    (Optional) Start the firebase emulators (vs set up a live Firebase instance). You will need to install the [firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) `npm i -g firebase-tools` and run the following command:
+    Start the firebase emulators. You will need to install the [firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) `npm i -g firebase-tools` and run the following command:
 
     ```bash
     # You might need to add a real "--project <projectName>" (run firebase projects:list)
@@ -34,13 +34,13 @@ Before you begin, you need to install the following tools:
 
 3. Seed data in your local Firebase instance:
 
-    Copy the `packages/local_db/seed.sample.json` to `packages/local_db/seed.json` and tweak the data as you see fit. Then run the following command:
+    Run the following command:
 
     ```bash
     yarn seed
     ```
 
-    To seed it to empty _*live*_ firestore instance you can use `yarn seed --force-prod`. If there is data in the live instance, it will not seed it again to bypass it use `yarn seed --reset --force-prod`
+    You should now have this file `packages/local_db/seed.json` that you can edit and reseed if you have need. To overwrite the existing data use `yarn seed --reset`.
 
 
 4. Install challenge folders where tests will be executed
@@ -60,3 +60,7 @@ Before you begin, you need to install the following tools:
     ```
     localhost:3000/0/sepolia/0xC7A49f9D6A7AcD951f604e7838C51B451b5244f2
     ```
+
+## Live Firebase Firestore Instance (For Production Environments)
+
+To seed data into an empty _*live*_ firestore instance you can use `yarn seed --force-prod`. If there is data in the live instance, it will not seed it again to bypass it use `yarn seed --reset --force-prod`

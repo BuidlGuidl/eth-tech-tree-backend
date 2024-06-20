@@ -2,17 +2,15 @@ import express, { Express, Request, Response, json } from "express";
 import https from "https";
 import fs from "fs";
 import cors from "cors";
-import dotenv from "dotenv";
 import {
   validateSubmission,
   fetchChallenge,
   downloadContract,
   testChallengeSubmission,
 } from "./utils";
+import { PORT } from "./utils";
 
-dotenv.config({ path: ['../../.env.local', '../../.env'] });
-
-const port = process.env.PORT || 3000;
+const port = PORT;
 
 export const startServer = async () => {
   const app: Express = express();
