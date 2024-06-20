@@ -2,17 +2,13 @@ import express, { Express, Request, Response, json } from "express";
 import https from "https";
 import fs from "fs";
 import cors from "cors";
-import dotenv from "dotenv";
 import {
   validateSubmission,
   fetchChallenge,
   downloadContract,
   testChallengeSubmission,
+  PORT
 } from "./utils";
-
-dotenv.config();
-
-const port = process.env.PORT || 3000;
 
 export const startServer = async () => {
   const app: Express = express();
@@ -64,12 +60,12 @@ export const startServer = async () => {
         },
         app
       )
-      .listen(port, () => {
-        console.log(`[server]: Server is running at http://localhost:${port}`);
+      .listen(PORT, () => {
+        console.log(`[server]: Server is running at http://localhost:${PORT}`);
       });
   } else {
-    app.listen(port, () => {
-      console.log(`[server]: Server is running at http://localhost:${port}`);
+    app.listen(PORT, () => {
+      console.log(`[server]: Server is running at http://localhost:${PORT}`);
     });
   }
 };
