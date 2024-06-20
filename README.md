@@ -40,7 +40,7 @@ Before you begin, you need to install the following tools:
     yarn seed
     ```
 
-    You should now have this file `packages/local_db/seed.json` that you can edit and reseed if you have need. To overwrite the existing data use `yarn seed --reset`.
+    You should now have this file `packages/firebase/seed.json` that you can edit and reseed if you have need. To overwrite the existing data use `yarn seed --reset`.
 
 
 4. Install challenge folders where tests will be executed
