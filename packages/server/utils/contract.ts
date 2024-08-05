@@ -72,7 +72,7 @@ export const downloadContract = async (
 
 /**
  * Run the test from within the challenge repo against the downloaded contract
- * Delete the downloaded contract after testing so we dont have the prod server stacking up files with each submission
+ * Delete the downloaded contract after testing so we don't have the prod server stacking up files with each submission
  */
 export const testChallengeSubmission = async (config: SubmissionConfig) => {
   const { challenge, address } = config;

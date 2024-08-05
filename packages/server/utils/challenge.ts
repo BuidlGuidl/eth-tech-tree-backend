@@ -1,12 +1,12 @@
-import * as fs from "fs/promises";
-import { Challenge } from "../types";
+import dbConnect from "../mongodb/dbConnect";
+import Challenge, { IChallenge } from "../mongodb/models/challenges";
 
 /**
  * Fetch metadata for all the challenges
  */
-export const fetchChallenges = async (): Promise<Challenge[]> => {
-  const data = await fs.readFile("challenges.json", { encoding: "utf8" });
-  const challenges = JSON.parse(data);
+export const fetchChallenges = async (): Promise<IChallenge[]> => {
+  await dbConnect();
+  const challenges = await Challenge.find({});
   return challenges;
 };
 
@@ -14,14 +14,14 @@ export const fetchChallenges = async (): Promise<Challenge[]> => {
  * Fetch metadata for a single challenge
  */
 export const fetchChallenge = async (
-  challengeId: number
-): Promise<Challenge> => {
+  challengeName: string
+): Promise<IChallenge> => {
   const challenges = await fetchChallenges();
-
-  if (!challenges[challengeId]) {
-    throw new Error(`Challenge "${challengeId}" not found.`);
+  const challenge = challenges.find((c) => c.name === challengeName);
+  if (!challenge) {
+    throw new Error(`Challenge "${challengeName}" not found.`);
   }
 
-  const challengeMetadata = challenges[challengeId];
+  const challengeMetadata = challenge;
   return challengeMetadata;
 };

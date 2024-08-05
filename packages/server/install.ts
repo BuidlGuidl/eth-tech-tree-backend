@@ -1,12 +1,12 @@
 import * as fs from "fs/promises";
 import { fetchChallenges, execute } from "./utils";
-import { type Challenge } from "./types";
+import { type IChallenge } from "./mongodb/models/challenges";
 
 /**
  * This script clones all the branches from the eth-tech-tree-challenges repo and installs the dependencies
  * Each branch is cloned into the `challenges/` directory of this repo
  */
-const setupChallenge = async (challenge: Challenge): Promise<void> => {
+const setupChallenge = async (challenge: IChallenge): Promise<void> => {
   try {
     const path = `${__dirname}/challenges/${challenge.name}`;
     const exists = await fs
@@ -16,7 +16,7 @@ const setupChallenge = async (challenge: Challenge): Promise<void> => {
 
     if (!exists) {
       console.log(`👯...CLONING ${challenge.name}...👯`);
-      const cloneBranchCommand = `git clone -b ${challenge.name} ${challenge.github} ${path}`;
+      const cloneBranchCommand = `git clone -b ${challenge.name} ${challenge.repo} ${path}`;
       await execute(cloneBranchCommand);
     }
 

@@ -7,7 +7,8 @@ import {
   fetchChallenge,
   downloadContract,
   testChallengeSubmission,
-  PORT
+  PORT,
+  fetchChallenges
 } from "./utils";
 
 export const startServer = async () => {
@@ -21,20 +22,28 @@ export const startServer = async () => {
   });
 
   /**
+   * Fetch all the challenges
+   */
+  app.get("/challenges", async (req: Request, res: Response) => {
+    const challenges = await fetchChallenges();
+    return res.json({ challenges });
+  });
+
+  /**
    * Challenge submission route temp setup as a GET to save us effort of firing POST requests during development
    * 1. Fetch the contract source code from Etherscan and save it into challenge repo
    * 2. Run the test from within the challenge repo against the downloaded contract
    * 3. Return the results
    */
   app.get(
-    "/:challengeId/:network/:address",
+    "/:challengeSlug/:network/:address",
     validateSubmission,
     async function (req: Request, res: Response) {
-      console.log("GET /:challengeId/:network/:address \n", req.params);
+      console.log("GET /:challengeSlug/:network/:address \n", req.params);
       const { network, address } = req.params;
-      const challengeId = +req.params.challengeId; // convert to number
+      const challengeSlug = req.params.challengeSlug;
       try {
-        const challenge = await fetchChallenge(challengeId);
+        const challenge = await fetchChallenge(challengeSlug);
         const submissionConfig = { challenge, network, address };
         await downloadContract(submissionConfig);
         const result = await testChallengeSubmission(submissionConfig);

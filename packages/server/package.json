@@ -12,14 +12,17 @@
     "start": "tsx index.ts",
     "dev": "tsx watch index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install:challenges": "tsx install.ts"
+    "install:challenges": "tsx install.ts",
+    "seed": "tsx mongodb/seed.ts"
   },
   "dependencies": {
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-validator": "^7.1.0"
+    "express-validator": "^7.1.0",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

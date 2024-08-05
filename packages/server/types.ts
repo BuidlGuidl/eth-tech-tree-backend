@@ -1,18 +1,7 @@
-export interface Challenge {
-  id: number;
-  type: string;
-  level: number;
-  name: string;
-  label: string;
-  github: string;
-  testHash: string;
-  contractName: string;
-  testFileName: string;
-  tags: string[];
-}
+import { IChallenge } from './mongodb/models/challenges';
 
 export interface SubmissionConfig {
-  challenge: Challenge;
+  challenge: IChallenge;
   network: string;
   address: string;
 }

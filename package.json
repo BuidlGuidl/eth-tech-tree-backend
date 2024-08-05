@@ -5,8 +5,7 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/server",
-      "packages/firebase"
+      "packages/server"
     ]
   },
   "scripts": {
@@ -14,7 +13,7 @@
     "start": "yarn workspace @ett-backend/server start",
     "dev": "yarn workspace @ett-backend/server dev",
     "install:challenges": "yarn workspace @ett-backend/server install:challenges",
-    "seed": "yarn workspace @ett-backend/firebase seed"
+    "seed": "yarn workspace @ett-backend/server seed"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
