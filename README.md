@@ -54,5 +54,19 @@ Before you begin, you need to install the following tools:
 6. Test a challenge submission for token wrapper weth at the following endpoint
 
     ```
-    localhost:3000/token-wrapper-weth/sepolia/0xC7A49f9D6A7AcD951f604e7838C51B451b5244f2
+    POST
+    localhost:3000/submit
+    ```
+    With this body:
+    ```
+    {
+    "challengeSlug": "token-wrapper-weth",
+    "network": "sepolia",
+    "contractAddress": "0xCa359ee2DF0CE120a9eDa850Aa743fC2b4F1ade9",
+    "userAddress": "0x60583563D5879C2E59973E5718c7DE2147971807"
+    }
+    ```
+    To test a failing contract use this as the contract address:
+    ```
+    0x4c45da107F95d8Ed27951EbDD4CF4CC56B47A83F
     ```
