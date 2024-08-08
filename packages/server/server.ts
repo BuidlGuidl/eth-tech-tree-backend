@@ -3,13 +3,14 @@ import https from "https";
 import fs from "fs";
 import cors from "cors";
 import {
-  validateSubmission,
-  fetchChallenge,
+  validateChallengeSubmission,
   downloadContract,
   testChallengeSubmission,
   PORT,
-  fetchChallenges
+  validateAddress
 } from "./utils";
+import { fetchChallenge, fetchChallenges } from "./services/challenge";
+import { fetchUser } from "./services/user";
 
 export const startServer = async () => {
   const app: Express = express();
@@ -30,6 +31,25 @@ export const startServer = async () => {
   });
 
   /**
+   * Fetch a user by their address
+   */
+  app.get("/user/:address", validateAddress, async (req: Request, res: Response) => {
+    console.log("GET /user/:address \n", req.params);
+    const address = req.params.address;
+    try {
+      const user = await fetchUser(address);
+      return res.json({ user });
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        return res.status(500).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: "Unexpected error occurred" });
+      }
+    }
+  });
+
+  /**
    * Challenge submission route temp setup as a GET to save us effort of firing POST requests during development
    * 1. Fetch the contract source code from Etherscan and save it into challenge repo
    * 2. Run the test from within the challenge repo against the downloaded contract
@@ -37,7 +57,7 @@ export const startServer = async () => {
    */
   app.get(
     "/:challengeSlug/:network/:address",
-    validateSubmission,
+    validateChallengeSubmission,
     async function (req: Request, res: Response) {
       console.log("GET /:challengeSlug/:network/:address \n", req.params);
       const { network, address } = req.params;

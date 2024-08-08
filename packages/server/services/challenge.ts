@@ -25,3 +25,11 @@ export const fetchChallenge = async (
   const challengeMetadata = challenge;
   return challengeMetadata;
 };
+
+/**
+ * Fetch array of challenge names
+ */
+export const fetchChallengeNames = async (): Promise<string[]> => {
+  const challenges = await fetchChallenges();
+  return challenges.map((c) => c.name);
+};
