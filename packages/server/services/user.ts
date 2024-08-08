@@ -2,7 +2,7 @@ import dbConnect from "../mongodb/dbConnect";
 import User, { IUser } from "../mongodb/models/user";
 
 /**
- * Fetch metadata for a single challenge
+ * Fetch a user
  */
 export const fetchUser = async (
   address: string

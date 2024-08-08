@@ -11,6 +11,7 @@ import {
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
 import { fetchUser } from "./services/user";
+import { parseTestResults } from "./utils/parseTestResults";
 
 export const startServer = async () => {
   const app: Express = express();
@@ -50,24 +51,27 @@ export const startServer = async () => {
   });
 
   /**
-   * Challenge submission route temp setup as a GET to save us effort of firing POST requests during development
-   * 1. Fetch the contract source code from Etherscan and save it into challenge repo
-   * 2. Run the test from within the challenge repo against the downloaded contract
-   * 3. Return the results
+   * Submit a deployed contract for a challenge
    */
-  app.get(
-    "/:challengeSlug/:network/:address",
+  app.post(
+    "/submit",
     validateChallengeSubmission,
     async function (req: Request, res: Response) {
-      console.log("GET /:challengeSlug/:network/:address \n", req.params);
-      const { network, address } = req.params;
-      const challengeSlug = req.params.challengeSlug;
+      console.log("POST /submit \n", req.body);
+      const { network, contractAddress, challengeSlug, userAddress } = req.body;
       try {
+        // Verify that no other submission exists for that contract address
+        // TODO
+        // Update the user's submission status to pending
+        // TODO
         const challenge = await fetchChallenge(challengeSlug);
-        const submissionConfig = { challenge, network, address };
+        const submissionConfig = { challenge, network, contractAddress };
         await downloadContract(submissionConfig);
         const result = await testChallengeSubmission(submissionConfig);
-        return res.json({ result });
+        const parsedTestResults = parseTestResults(result);
+        // Update the user's submission status to complete or failed
+        // TODO
+        return res.json({ result: parsedTestResults });
       } catch (e) {
         console.error(e);
         if (e instanceof Error) {

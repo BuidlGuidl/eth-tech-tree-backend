@@ -10,10 +10,10 @@ import fs from "fs";
 export const downloadContract = async (
   config: SubmissionConfig
 ): Promise<void> => {
-  const { challenge, network, address } = config;
-  console.log(`📡 Downloading ${address} from ${network}...`);
+  const { challenge, network, contractAddress } = config;
+  console.log(`📡 Downloading ${contractAddress} from ${network}...`);
   const API_URL = `https://api-${network}.etherscan.io/api`;
-  const paramString = `?module=contract&action=getsourcecode&address=${address}&apikey=${ETHERSCAN_API_KEY}`;
+  const paramString = `?module=contract&action=getsourcecode&address=${contractAddress}&apikey=${ETHERSCAN_API_KEY}`;
 
   let sourceCodeParsed;
   try {
@@ -61,7 +61,7 @@ export const downloadContract = async (
       );
     }
     const path = `${__dirname}/../challenges/${challenge.name}`;
-    const contractPath = `${path}/packages/foundry/contracts/download-${address}.sol`;
+    const contractPath = `${path}/packages/foundry/contracts/download-${contractAddress}.sol`;
     fs.writeFileSync(contractPath, sourceCodeParsed);
     console.log(`📝 Contract saved at ${path}`);
   } catch (e) {
@@ -75,18 +75,19 @@ export const downloadContract = async (
  * Delete the downloaded contract after testing so we don't have the prod server stacking up files with each submission
  */
 export const testChallengeSubmission = async (config: SubmissionConfig) => {
-  const { challenge, address } = config;
+  const { challenge, contractAddress } = config;
 
   try {
     console.log("🧪 Testing challenge submission...");
     const path = `${__dirname}/../challenges/${challenge.name}`;
-    const testCommand = `cd ${path} && yarn foundry:test`;
+    const contractPath = `download-${contractAddress}.sol`;
+    const testCommand = `cd ${path} && CONTRACT_PATH="${contractPath}" yarn foundry:test`;
     const { stdout } = await execute(testCommand);
-    const removeContractCommand = `rm -f ${path}/packages/foundry/contracts/download-${address}.sol`;
+    const removeContractCommand = `rm -f ${path}/packages/foundry/contracts/download-${contractAddress}.sol`;
     execute(removeContractCommand);
     return stdout;
   } catch (e) {
-    console.error("Test failed", JSON.stringify(e), "\n");
+    console.error("Something went wrong", JSON.stringify(e), "\n");
     throw e;
   }
 };
