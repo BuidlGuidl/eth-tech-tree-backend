@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
-import { fetchChallenges, execute } from "./utils";
+import {  execute } from "./utils";
+import { fetchChallenges } from "./services/challenge";
 import { type IChallenge } from "./mongodb/models/challenges";
 
 /**

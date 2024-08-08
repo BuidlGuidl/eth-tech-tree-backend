@@ -38,16 +38,16 @@ export const downloadContract = async (
     try {
       // Option 3. A valid JSON
       const parsedJson = JSON.parse(sourceCode);
-      sourceCodeParsed = parsedJson?.[`${challenge.contractName}.sol`]?.content;
+      sourceCodeParsed = parsedJson?.[`${challenge.contractName}`]?.content;
     } catch (e) {
       if (sourceCode.slice(0, 1) === "{") {
         // Option 2. An almost valid JSON
         // Remove the initial and final { }
         const validJson = JSON.parse(sourceCode.substring(1).slice(0, -1));
         sourceCodeParsed =
-          validJson?.sources[`contracts/${challenge.contractName}.sol`]
+          validJson?.sources[`contracts/${challenge.contractName}`]
             ?.content ??
-          validJson?.sources[`./contracts/${challenge.contractName}.sol`]
+          validJson?.sources[`./contracts/${challenge.contractName}`]
             ?.content;
       } else {
         // Option 1. A string
@@ -57,7 +57,7 @@ export const downloadContract = async (
 
     if (!sourceCodeParsed) {
       throw new Error(
-        `Contract Source Code is not valid. Are you submitting ${challenge.contractName}.sol Contract Address?`
+        `Contract Source Code is not valid. Are you submitting ${challenge.contractName} Contract Address?`
       );
     }
     const path = `${__dirname}/../challenges/${challenge.name}`;
