@@ -22,7 +22,8 @@
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.5.1"
+    "mongoose": "^8.5.1",
+    "viem": "^2.19.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

@@ -1,28 +1,45 @@
 import mongoose, { Model, Schema } from "mongoose";
 
+export interface IGasReport {
+  functionName: string;
+  gasUsed: number;
+}
+
 export interface IUserChallenge {
+  challengeName: string
   status: string;
   lastFeedback: string;
-  timestamp: number;
+  timestamp: Date;
   contractAddress: string;
   network: string;
-  gasReport?: {
-    [key: string]: number;
-  };
+  gasReport?: IGasReport[];
 }
 
 export interface IUser {
   address: string;
   ens: string;
-  creationTimestamp: number;
-  challenges: {
-    [key: string]: IUserChallenge;
-  };
+  creationDate: Date;
+  challenges: IUserChallenge[];
 }
 
 interface IUserModel extends Model<IUser, object> {}
 
+const GasReportSchema = new Schema<IGasReport>({
+  functionName: {
+    type: String,
+    required: true,
+  },
+  gasUsed: {
+    type: Number,
+    required: true,
+  },
+});
+
 const UserChallengeSchema = new Schema<IUserChallenge>({
+  challengeName: {
+    type: String,
+    required: true
+  },
   status: {
     type: String,
     required: true,
@@ -32,8 +49,9 @@ const UserChallengeSchema = new Schema<IUserChallenge>({
     required: true,
   },
   timestamp: {
-    type: Number,
+    type: Date,
     required: true,
+    default: Date.now(),
   },
   contractAddress: {
     type: String,
@@ -43,10 +61,7 @@ const UserChallengeSchema = new Schema<IUserChallenge>({
     type: String,
     required: true,
   },
-  gasReport: {
-    type: Map,
-    of: Number
-  },
+  gasReport: [GasReportSchema],
 });
 
 const UserSchema = new Schema<IUser, IUserModel>({
@@ -55,11 +70,12 @@ const UserSchema = new Schema<IUser, IUserModel>({
     required: true,
   },
   ens: String,
-  creationTimestamp: {
-    type: Number,
+  creationDate: {
+    type: Date,
     required: true,
+    default: Date.now(),
   },
-  challenges: { type: Map, of: UserChallengeSchema },
+  challenges: [UserChallengeSchema],
 });
 
 const User = (mongoose.models.User as IUserModel) || mongoose.model<IUser, IUserModel>("User", UserSchema);

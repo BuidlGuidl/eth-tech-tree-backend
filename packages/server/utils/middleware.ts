@@ -3,17 +3,17 @@ import { Request, Response, NextFunction } from "express";
 import { ALLOWED_NETWORKS } from ".";
 import { fetchChallengeNames } from "../services/challenge";
 
-const isChallengeSlug = async (challengeSlug: string) => {
+const ischallengeName = async (challengeName: string) => {
   const challengeNames = await fetchChallengeNames();
-  return challengeNames.includes(challengeSlug);
+  return challengeNames.includes(challengeName);
 };
 
 /**
  * Validations for the params of the challenge submission route
  */
 export const validateChallengeSubmission = [
-  body("challengeSlug").custom(async slug => {
-    if (!await isChallengeSlug(slug)) {
+  body("challengeName").custom(async slug => {
+    if (!await ischallengeName(slug)) {
       throw new Error(`Challenge "${slug}" not found.`);
     }
   }),
@@ -28,6 +28,18 @@ export const validateChallengeSubmission = [
     next();
   },
 ];
+
+export const validateNewUser = [
+  body("address").optional().isEthereumAddress().withMessage("Invalid Ethereum address"),
+  body("ens").optional().isString().withMessage("Invalid ENS name"),
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+]
 
 export const validateAddress = [
   param("address").isEthereumAddress().withMessage("Invalid Ethereum address"),
