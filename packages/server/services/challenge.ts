@@ -6,7 +6,7 @@ import Challenge, { IChallenge } from "../mongodb/models/challenges";
  */
 export const fetchChallenges = async (): Promise<IChallenge[]> => {
   await dbConnect();
-  const challenges = await Challenge.find({});
+  const challenges = await Challenge.find({}, "-_id -__v");
   return challenges;
 };
 
