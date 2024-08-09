@@ -60,7 +60,7 @@ Before you begin, you need to install the following tools:
     With this body:
     ```
     {
-    "challengeSlug": "token-wrapper-weth",
+    "challengeName": "token-wrapper-weth",
     "network": "sepolia",
     "contractAddress": "0xCa359ee2DF0CE120a9eDa850Aa743fC2b4F1ade9",
     "userAddress": "0x60583563D5879C2E59973E5718c7DE2147971807"

@@ -1,3 +1,5 @@
+import { IGasReport } from "../mongodb/models/user";
+
 interface TestResult {
     name: string;
     gas: number;
@@ -8,7 +10,7 @@ interface TestResult {
     passed: boolean;
     passingTests: Record<string, TestResult>;
     failingTests: Record<string, TestResult>;
-    gasUsage: Record<string, number>;
+    gasReport: IGasReport[];
   }
   
   export const parseTestResults = (output: string): ParsedResults => {
@@ -16,8 +18,9 @@ interface TestResult {
       passed: false,
       passingTests: {},
       failingTests: {},
-      gasUsage: {},
+      gasReport: [],
     };
+    const gasUsage: { [key: string]: number } = {};
   
     // Split the output into individual lines
     const lines = output.split('\n');
@@ -30,7 +33,7 @@ interface TestResult {
         const [, testName, gas] = passingTestMatch;
         const testResult: TestResult = { name: testName, gas: parseInt(gas) };
         results.passingTests[testName] = testResult;
-        results.gasUsage[testName] = testResult.gas;
+        gasUsage[testName] = testResult.gas;
       }
   
       // Check for failing tests
@@ -39,12 +42,16 @@ interface TestResult {
         const [, reason, testName, gas] = failingTestMatch;
         const testResult: TestResult = { name: testName, reason, gas: parseInt(gas) };
         results.failingTests[testName] = testResult;
-        results.gasUsage[testName] = testResult.gas;
+        gasUsage[testName] = testResult.gas;
       }
     }
   
     if (Object.keys(results.failingTests).length === 0) {
       results.passed = true;
+      // Process gas usage for each test
+      for (const testName in gasUsage) {
+        results.gasReport.push({ functionName: testName, gasUsed: gasUsage[testName] });
+      }
     }
     return results;
   };

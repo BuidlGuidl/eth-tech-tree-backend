@@ -9,7 +9,7 @@
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["Governance"],
       "contractName": "Voting.sol",
-      "testFileName":"Voting.t.sol",
+      "testFileName": "Voting.t.sol",
       "childrenNames": ["dao-governance-proposals-and-voting"],
       "enabled": true,
       "description": ""
@@ -30,7 +30,7 @@
       "label": "Multisend",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "contractName": "Multisend.sol",
-      "testFileName":"Multisend.t.sol",
+      "testFileName": "Multisend.t.sol",
       "tags": ["DeFi"],
       "childrenNames": ["eth-streaming"],
       "enabled": true,
@@ -38,16 +38,16 @@
     },
     {
       "type": "challenge",
-      "level": 1, 
+      "level": 1,
       "name": "eth-streaming",
       "label": "ETH Stream",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "contractName": "EthStreaming.sol",
-      "testFileName":"EthStreaming.sol",
+      "testFileName": "EthStreaming.sol",
       "tags": ["DeFi"],
       "childrenNames": ["custom-stream"],
       "enabled": true,
-      "description": ""      
+      "description": ""
     },
     {
       "type": "challenge",
@@ -64,7 +64,7 @@
       "name": "token-wrapper-weth",
       "label": "Token Wrapper - WETH",
       "contractName": "WrappedETH.sol",
-      "testFileName":"WrappedETH.t.sol",
+      "testFileName": "WrappedETH.t.sol",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
       "childrenNames": ["rebasing-token"],
@@ -459,7 +459,7 @@
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["Wallets"],
       "contractName": "SocialRecovery.sol",
-      "testFileName":"SocialRecovery.t.sol",
+      "testFileName": "SocialRecovery.t.sol",
       "childrenNames": ["multisig-extension"],
       "enabled": true,
       "description": ""
@@ -641,41 +641,46 @@
       "address": "0x60583563D5879C2E59973E5718c7DE2147971807",
       "ens": "carletex.eth",
       "creationTimestamp": 1633088553221,
-      "challenges": {
-        "token-voting": {
+      "challenges": [
+        {
+          "challengeName": "token-voting",
           "status": "failed",
           "lastFeedback": "Test failed with ...",
           "timestamp": 1657208443047,
           "contractAddress": "0x55b9CB0bCf56057010b9c471e7D42d60e1111EEa",
           "network": "sepolia"
         },
-        "eth-and-token-streaming": {
+        {
+          "challengeName": "eth-and-token-streaming",
           "status": "pending",
           "lastFeedback": "Test pending",
           "timestamp": 1657208443047,
           "contractAddress": "0x54b9CB0bCf56057010b9c471e7D42d60e1111EEb",
           "network": "sepolia"
         },
-        "token-wrapper-weth": {
+        {
+          "challengeName": "token-wrapper-weth",
           "status": "success",
           "lastFeedback": "Successfully passed",
           "timestamp": 1657208443047,
           "contractAddress": "0x53b9CB0bCf56057010b9c471e7D42d60e1111EEc",
           "network": "sepolia",
-          "gasReport": {
-            "deploy": 100000,
-            "interact": 50000,
-            "withdraw": 20000
-          }
+          "gasReport": [
+            {
+              "functionName": "deploy",
+              "gasUsed": 100000
+            },
+            {
+              "functionName": "interact",
+              "gasUsed": 50000
+            },
+            {
+              "functionName": "withdraw",
+              "gasUsed": 20000
+            }
+          ]
         }
-      },
-      "attestations": {
-        "token-wrapper-weth": {
-          "status": "success",
-          "timestamp": 1657208443047,
-          "tx": "0x6be7d0065eb1ec0f5e9296b82b527e4b1b8fec91d890066d43857044443a9969"
-        }
-      }
+      ]
     }
   ]
 }
