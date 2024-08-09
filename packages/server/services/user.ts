@@ -1,5 +1,5 @@
 import dbConnect from "../mongodb/dbConnect";
-import User, { IGasReport, IUser, IUserChallenge } from "../mongodb/models/user";
+import User, { IGasReport, IUser } from "../mongodb/models/user";
 import { getEnsName, getEnsAddress } from "./ens";
 
 /**
@@ -9,7 +9,7 @@ export const fetchUser = async (
   address: string
 ): Promise<IUser> => {
   await dbConnect();
-  const user = await User.findOne({ address: address });
+  const user = await User.findOne({ address: address }, "-_id -__v -challenges.gasReport._id");
 
   return (user?.toObject() || {}) as IUser;
 };
@@ -19,7 +19,7 @@ export const fetchUser = async (
  */
 export const fetchUserWithChallengeAtAddress = async (contractAddress: string): Promise<IUser | null> => {
   await dbConnect();
-  const user = await User.findOne({ "challenges.contractAddress": contractAddress });
+  const user = await User.findOne({ "challenges.contractAddress": contractAddress }, "-_id -__v");
 
   return user;
 };
@@ -42,7 +42,7 @@ export const createUser = async (
     ens = await getEnsName(address) as string;
   }
   await User.findOneAndUpdate({ address }, { address, ens }, {upsert: true});
-  const user = await User.findOne({ address });
+  const user = await User.findOne({ address }, "-_id -__v");
   return user as IUser;
 }
 
