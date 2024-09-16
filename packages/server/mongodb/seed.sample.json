@@ -43,7 +43,7 @@
       "label": "ETH Stream",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "contractName": "EthStreaming.sol",
-      "testFileName": "EthStreaming.sol",
+      "testFileName": "EthStreaming.t.sol",
       "tags": ["DeFi"],
       "childrenNames": ["custom-stream"],
       "enabled": true,
