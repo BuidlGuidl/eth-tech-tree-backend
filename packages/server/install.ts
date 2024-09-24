@@ -9,22 +9,18 @@ import { type IChallenge } from "./mongodb/models/challenges";
  */
 const setupChallenge = async (challenge: IChallenge): Promise<void> => {
   try {
-    const path = `${__dirname}/challenges/${challenge.name}`;
+    const challengesDirectory = `${__dirname}/challenges`;
+    const path = `${challengesDirectory}/${challenge.name}`;
     const exists = await fs
       .access(path)
       .then(() => true)
       .catch(() => false);
 
     if (!exists) {
-      console.log(`👯...CLONING ${challenge.name}...👯`);
-      const cloneBranchCommand = `git clone -b ${challenge.name} ${challenge.repo} ${path}`;
-      await execute(cloneBranchCommand);
+      console.log(`👯...Setting up ${challenge.name}...👯`);
+      const setupChallengeCommand = `npx eth-tech-tree setup ${challenge.name} ${challengesDirectory}`;
+      await execute(setupChallengeCommand);
     }
-
-    console.log(`🛠️...UPDATING ${challenge.name}...🛠️`);
-    // w/o the `forge install` the submodules won't be installed for some reason
-    const updateChallengeCommand = `cd ${path} && git pull && yarn install && cd ${path}/packages/foundry && forge install`;
-    await execute(updateChallengeCommand);
   } catch (e) {
     console.error(e);
   }
@@ -33,8 +29,11 @@ const setupChallenge = async (challenge: IChallenge): Promise<void> => {
 const main = async (): Promise<void> => {
   const challenges = await fetchChallenges();
   for (const challenge of challenges) {
-    await setupChallenge(challenge);
+    if (challenge.enabled) {
+      await setupChallenge(challenge);
+    }
   }
+  console.log("🚀...SETUP COMPLETE...🚀");
 };
 
-main();
+main().then(() => process.exit(0));
