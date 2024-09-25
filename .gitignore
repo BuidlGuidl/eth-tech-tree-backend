@@ -13,3 +13,7 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 .eslintcache
+
+server.key
+server.cert
+server.ca
