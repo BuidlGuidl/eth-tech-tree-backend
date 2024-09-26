@@ -129,17 +129,19 @@ export const startServer = async () => {
   );
 
   // Start server
-  if (fs.existsSync("server.key") && fs.existsSync("server.cert")) {
+  if (fs.existsSync("server.key") && fs.existsSync("server.cert") && fs.existsSync("server.ca")) {
+    console.log("Starting server with HTTPS");
     https
       .createServer(
         {
           key: fs.readFileSync("server.key"),
           cert: fs.readFileSync("server.cert"),
+          ca: fs.readFileSync("server.ca"),
         },
         app
       )
       .listen(PORT, () => {
-        console.log(`[server]: Server is running at http://localhost:${PORT}`);
+        console.log(`[server]: Server is running at https://localhost:${PORT}`);
       });
   } else {
     app.listen(PORT, () => {
