@@ -18,8 +18,10 @@ const setupChallenge = async (challenge: IChallenge): Promise<void> => {
 
     if (!exists) {
       console.log(`👯...Setting up ${challenge.name}...👯`);
-      const setupChallengeCommand = `npx eth-tech-tree setup ${challenge.name} ${challengesDirectory}`;
+      const setupChallengeCommand = `npx --yes eth-tech-tree@latest setup ${challenge.name} ${challengesDirectory}`;
       await execute(setupChallengeCommand);
+      console.log(`Removing NextJS directory from ${challenge.name}`);
+      await fs.rm(`${path}/packages/nextjs`, { recursive: true });
     }
   } catch (e) {
     console.error(e);
