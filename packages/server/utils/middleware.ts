@@ -41,8 +41,8 @@ export const validateNewUser = [
   },
 ]
 
-export const validateAddress = [
-  param("address").isEthereumAddress().withMessage("Invalid Ethereum address"),
+export const validateIdentifier = [
+  param("identifier").isString().withMessage("Invalid Ethereum address or ENS name"),
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

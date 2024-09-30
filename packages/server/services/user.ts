@@ -6,10 +6,11 @@ import { getEnsName, getEnsAddress } from "./ens";
  * Fetch a user
  */
 export const fetchUser = async (
-  address: string
+  identifier: string
 ): Promise<IUser> => {
   await dbConnect();
-  const user = await User.findOne({ address: address }, "-_id -__v -challenges.gasReport._id");
+  // Fetch user by address or ENS name
+  const user = await User.findOne({ $or: [{ address: identifier}, { ens: identifier}]}, "-_id -__v");
 
   return (user?.toObject() || {}) as IUser;
 };
@@ -29,7 +30,9 @@ export const fetchUserWithChallengeAtAddress = async (contractAddress: string): 
  */
 export const createUser = async (
   address: string,
-  ens: string
+  ens: string,
+  device: string,
+  location: string
 ): Promise<IUser> => {
   await dbConnect();
   if (!address) {
@@ -41,7 +44,8 @@ export const createUser = async (
   if (!ens) {
     ens = await getEnsName(address) as string;
   }
-  await User.findOneAndUpdate({ address }, { address, ens }, {upsert: true});
+  const installLocations = { location, device };
+  await User.findOneAndUpdate({ address }, { address, ens, $push: { installLocations } }, {upsert: true});
   const user = await User.findOne({ address }, "-_id -__v");
   return user as IUser;
 }

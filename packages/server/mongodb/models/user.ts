@@ -20,6 +20,12 @@ export interface IUser {
   ens: string;
   creationDate: Date;
   challenges: IUserChallenge[];
+  installLocations?: IInstallLocation[];
+}
+
+export interface IInstallLocation {
+  location: string;
+  device: string;
 }
 
 interface IUserModel extends Model<IUser, object> {}
@@ -33,7 +39,18 @@ const GasReportSchema = new Schema<IGasReport>({
     type: Number,
     required: true,
   },
-});
+}, { _id: false });
+
+const InstallLocationSchema = new Schema<IInstallLocation>({
+  location: {
+    type: String,
+    required: true,
+  },
+  device: {
+    type: String,
+    required: true,
+  },
+}, { _id: false });
 
 const UserChallengeSchema = new Schema<IUserChallenge>({
   challengeName: {
@@ -62,7 +79,7 @@ const UserChallengeSchema = new Schema<IUserChallenge>({
     required: true,
   },
   gasReport: [GasReportSchema],
-});
+}, { _id: false });
 
 const UserSchema = new Schema<IUser, IUserModel>({
   address: {
@@ -76,6 +93,7 @@ const UserSchema = new Schema<IUser, IUserModel>({
     default: Date.now(),
   },
   challenges: [UserChallengeSchema],
+  installLocations: [InstallLocationSchema],
 });
 
 const User = (mongoose.models.User as IUserModel) || mongoose.model<IUser, IUserModel>("User", UserSchema);

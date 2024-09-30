@@ -7,7 +7,7 @@ import {
   downloadContract,
   testChallengeSubmission,
   PORT,
-  validateAddress,
+  validateIdentifier,
   validateNewUser
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
@@ -35,11 +35,11 @@ export const startServer = async () => {
   /**
    * Fetch a user by their address
    */
-  app.get("/user/:address", validateAddress, async (req: Request, res: Response) => {
-    console.log("GET /user/:address \n", req.params);
-    const address = req.params.address;
+  app.get("/user/:identifier", validateIdentifier, async (req: Request, res: Response) => {
+    console.log("GET /user/:identifier \n", req.params);
+    const identifier = req.params.identifier;
     try {
-      const user = await fetchUser(address);
+      const user = await fetchUser(identifier);
       return res.json({ user });
     } catch (e) {
       console.error(e);
@@ -56,10 +56,10 @@ export const startServer = async () => {
    */
   app.post("/user", validateNewUser, async (req: Request, res: Response) => {
     console.log("POST /user \n", req.body);
-    const { address, ens } = req.body;
+    const { address, ens, device, location } = req.body;
     try {
       // Create a new user
-      const user = await createUser(address, ens);
+      const user = await createUser(address, ens, device, location);
       return res.json({ user });
     } catch (e) {
       console.error(e);
