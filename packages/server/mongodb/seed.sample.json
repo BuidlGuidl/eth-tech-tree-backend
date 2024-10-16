@@ -12,7 +12,7 @@
       "testFileName": "Voting.t.sol",
       "childrenNames": ["dao-governance-proposals-and-voting"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will build a smart contract that facilitates token-based voting. Token holders will be able to vote on a proposal, with their voting power determined by the number of tokens they hold. The contract will securely tally votes for or against the proposal and ensure transparency throughout the voting process. The goal is to create a decentralized governance system where token ownership directly influences decision-making, allowing for fair and representative voting on key organizational matters."
     },
     {
       "type": "quiz",
@@ -34,7 +34,7 @@
       "tags": ["DeFi"],
       "childrenNames": ["eth-streaming"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will build a smart contract capable of sending ETH or ERC20 tokens to multiple addresses in a single transaction. The contract will include two separate methods: one for transferring ETH and another for transferring ERC20 tokens. Each method will accept an array of recipient addresses and corresponding amounts, while the ERC20 method will also require the token's address. The goal is to help participants understand the basics of asset transference on Ethereum, including handling both native blockchain assets and tokens."
     },
     {
       "type": "challenge",
@@ -47,7 +47,7 @@
       "tags": ["DeFi"],
       "childrenNames": ["custom-stream"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will build a smart contract called \"EthStreaming\" that allows authorized users to continuously withdraw predefined amounts of ETH over time. The contract will manage the flow of Ethereum assets in a decentralized manner, ensuring that withdrawals are based on the passage of time since the last withdrawal. The goal is to help participants understand how to create a system for streaming ETH, providing an innovative mechanism for managing and distributing capital on Ethereum."
     },
     {
       "type": "challenge",
@@ -69,7 +69,7 @@
       "tags": ["DeFi"],
       "childrenNames": ["rebasing-token"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will build a smart contract that acts as an ERC20-compliant wrapper for ETH, creating a token known as WETH (Wrapped ETH). This is useful because WETH allows DeFi protocols to handle ETH in the same way they handle any other ERC20 token, without needing special functions for native ETH. The contract will accept ETH deposits and issue an equivalent amount of WETH to the depositor, enabling seamless integration of ETH into ERC20-based systems."
     },
     {
       "type": "challenge",
@@ -80,7 +80,7 @@
       "tags": ["DeFi"],
       "childrenNames": ["multisend"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will build an ERC20-compliant rebasing token. Rebasing tokens automatically adjust their total supply based on specific conditions, proportionally affecting all token holders' balances. The task involves implementing a mechanism where the token supply expands or contracts using a parameter called SupplyDelta, with the changes applied proportionally through a scaling factor. The token's rebasing logic will ensure that balances and transfers are adjusted according to this scaling factor. The challenge helps participants understand the mechanics behind rebasing tokens and their applications in decentralized finance."
     },
     {
       "type": "quiz",
@@ -210,7 +210,7 @@
       "tags": ["Wallets"],
       "childrenNames": ["social-recovery"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will build a smart contract that implements a \"Dead Man's Switch.\" This contract allows users to deposit funds, either in ETH or tokens, and set a time interval for regular check-ins. If the user fails to check in within the specified time frame, designated beneficiaries are allowed to withdraw the funds. This mechanism ensures that in the event of the user's inability to access the contract (due to death or other reasons), the funds can still be recovered by trusted individuals. The challenge focuses on developing this safety feature using smart contract logic."
     },
     {
       "type": "quiz",
@@ -242,7 +242,7 @@
       "tags": ["Governance"],
       "childrenNames": ["moloch-rage-quit", "offchain-voting"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will create a smart contract that enables a decentralized governance system for token holders. The contract will allow users to propose and vote on various proposals, each consisting of a title, a voting deadline, and the address of the creator. Token holders can cast their votes with one of three options: Yea, Nay, or Abstain, with the weight of their vote determined by the number of tokens they hold. Additionally, the contract will include functionality to calculate the results of the vote once the voting period has ended. This challenge focuses on using Solidity to facilitate basic governance."
     },
     {
       "type": "challenge",
@@ -462,7 +462,7 @@
       "testFileName": "SocialRecovery.t.sol",
       "childrenNames": ["multisig-extension"],
       "enabled": true,
-      "description": ""
+      "description": "In this challenge, participants will develop a social recovery wallet that provides a user-friendly solution for securely managing a wallet without fear of losing access permanently. Inspired by the need for resilience, the wallet will allow users to select a group of trusted guardian addresses. In the event that the seed phrase is lost, these guardians can collaborate to recover access to the wallet while maintaining the user's autonomy. The challenge focuses on implementing this innovative recovery mechanism using smart contract logic, enhancing security and usability for cryptocurrency holders."
     },
     {
       "type": "challenge",
