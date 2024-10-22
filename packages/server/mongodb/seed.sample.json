@@ -17,10 +17,10 @@
     {
       "type": "quiz",
       "level": 1,
-      "name": "the-dao-for-context",
-      "label": "The DAO (for context)",
+      "name": "the-dao-hack",
+      "label": "The DAO Hack",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
-      "tags": ["Governance"],
+      "tags": ["Governance", "General"],
       "description": ""
     },
     {
@@ -32,7 +32,7 @@
       "contractName": "Multisend.sol",
       "testFileName": "Multisend.t.sol",
       "tags": ["DeFi"],
-      "childrenNames": ["eth-streaming"],
+      "childrenNames": [],
       "enabled": true,
       "description": "In this challenge, participants will build a smart contract capable of sending ETH or ERC20 tokens to multiple addresses in a single transaction. The contract will include two separate methods: one for transferring ETH and another for transferring ERC20 tokens. Each method will accept an array of recipient addresses and corresponding amounts, while the ERC20 method will also require the token's address. The goal is to help participants understand the basics of asset transference on Ethereum, including handling both native blockchain assets and tokens."
     },
@@ -56,6 +56,7 @@
       "label": "Advanced Streams",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
+      "childrenNames": ["liquid-share-nft"],
       "description": ""
     },
     {
@@ -89,6 +90,7 @@
       "label": "Timing + incentives",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
+      "childrenNames": ["liquidation-system"],
       "description": ""
     },
     {
@@ -98,6 +100,7 @@
       "label": "Handle tokens in wallet",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi", "Wallets"],
+      "childrenNames": ["permit2"],
       "description": ""
     },
     {
@@ -142,7 +145,7 @@
       "name": "merkle-trees",
       "label": "Merkle Trees",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
-      "tags": ["General", "NFTs"],
+      "tags": ["General", "NFTs", "DeFi"],
       "description": ""
     },
     {
@@ -168,6 +171,16 @@
       "level": 2,
       "name": "svg-nfts",
       "label": "SVG NFTs",
+      "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
+      "tags": ["NFTs"],
+      "childrenNames": ["composable-svg-nfts"],
+      "description": ""
+    },
+    {
+      "type": "challenge",
+      "level": 2,
+      "name": "composable-svg-nfts",
+      "label": "Composable SVG NFTs",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["NFTs"],
       "description": ""
@@ -240,7 +253,7 @@
       "contractName": "Governance.sol",
       "testFileName": "Governance.t.sol",
       "tags": ["Governance"],
-      "childrenNames": ["moloch-rage-quit", "offchain-voting"],
+      "childrenNames": ["moloch-rage-quit", "offchain-voting", "voting-types"],
       "enabled": true,
       "description": "In this challenge, participants will create a smart contract that enables a decentralized governance system for token holders. The contract will allow users to propose and vote on various proposals, each consisting of a title, a voting deadline, and the address of the creator. Token holders can cast their votes with one of three options: Yea, Nay, or Abstain, with the weight of their vote determined by the number of tokens they hold. Additionally, the contract will include functionality to calculate the results of the vote once the voting period has ended. This challenge focuses on using Solidity to facilitate basic governance."
     },
@@ -320,7 +333,7 @@
       "type": "challenge",
       "level": 2,
       "name": "gas-golf",
-      "label": "Gas Golf (Would be multiple challenges, maybe even a second tech tree)",
+      "label": "Gas Golf",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["General"],
       "description": ""
@@ -368,6 +381,7 @@
       "label": "Security - study past hacks",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["General"],
+      "childrenNames": ["the-dao-hack"],
       "description": ""
     },
     {
@@ -440,6 +454,7 @@
       "label": "NFT Permissions",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["NFTs"],
+      "childrenNames": ["gated-nft"],
       "description": ""
     },
     {
@@ -460,7 +475,7 @@
       "tags": ["Wallets"],
       "contractName": "SocialRecovery.sol",
       "testFileName": "SocialRecovery.t.sol",
-      "childrenNames": ["multisig-extension"],
+      "childrenNames": ["multisig"],
       "enabled": true,
       "description": "In this challenge, participants will develop a social recovery wallet that provides a user-friendly solution for securely managing a wallet without fear of losing access permanently. Inspired by the need for resilience, the wallet will allow users to select a group of trusted guardian addresses. In the event that the seed phrase is lost, these guardians can collaborate to recover access to the wallet while maintaining the user's autonomy. The challenge focuses on implementing this innovative recovery mechanism using smart contract logic, enhancing security and usability for cryptocurrency holders."
     },
@@ -480,6 +495,7 @@
       "label": "Lending App",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
+      "childrenNames": ["options", "shorting", "timing-incentives"],
       "description": ""
     },
     {
@@ -489,6 +505,7 @@
       "label": "Options",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
+      "childrenNames": ["order-book"],
       "description": ""
     },
     {
@@ -507,6 +524,7 @@
       "label": "Order book",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
+      "childrenNames": ["prediction-market"],
       "description": ""
     },
     {
@@ -534,6 +552,16 @@
       "label": "MEV Bot",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["MEV"],
+      "description": ""
+    },
+    {
+      "type": "challenge",
+      "level": 3,
+      "name": "multisig",
+      "label": "Multisig",
+      "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
+      "tags": ["Wallets"],
+      "childrenNames": ["multisig-extension"],
       "description": ""
     },
     {
@@ -579,6 +607,7 @@
       "label": "Randomness Onchain",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["General"],
+      "childrenNames": ["randao"],
       "description": ""
     },
     {
@@ -614,6 +643,7 @@
       "name": "fractional-nfts",
       "label": "Fractional NFTs",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
+      "childrenNames": ["liquid-share-nft"],
       "tags": ["NFTs"],
       "description": ""
     },
