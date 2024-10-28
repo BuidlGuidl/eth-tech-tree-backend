@@ -79,9 +79,19 @@
       "label": "Rebasing token",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
-      "childrenNames": ["multisend"],
+      "childrenNames": [],
       "enabled": true,
       "description": "In this challenge, participants will build an ERC20-compliant rebasing token. Rebasing tokens automatically adjust their total supply based on specific conditions, proportionally affecting all token holders' balances. The task involves implementing a mechanism where the token supply expands or contracts using a parameter called SupplyDelta, with the changes applied proportionally through a scaling factor. The token's rebasing logic will ensure that balances and transfers are adjusted according to this scaling factor. The challenge helps participants understand the mechanics behind rebasing tokens and their applications in decentralized finance."
+    },
+    {
+      "type": "challenge",
+      "level": 1,
+      "name": "cron-job",
+      "label": "Cron job",
+      "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
+      "tags": ["DeFi"],
+      "childrenNames": [""],
+      "description": ""
     },
     {
       "type": "quiz",
@@ -90,7 +100,7 @@
       "label": "Timing + incentives",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
-      "childrenNames": ["liquidation-system"],
+      "childrenNames": ["cron-job"],
       "description": ""
     },
     {
@@ -290,7 +300,8 @@
       "name": "oracles",
       "label": "Oracles",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
-      "tags": ["DeFi"],
+      "childrenNames": ["prediction-market"],
+      "tags": ["General", "DeFi"],
       "description": ""
     },
     {
@@ -495,7 +506,7 @@
       "label": "Lending App",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
-      "childrenNames": ["options", "shorting", "timing-incentives"],
+      "childrenNames": ["options", "shorting", "liquidation-system"],
       "description": ""
     },
     {
@@ -524,7 +535,7 @@
       "label": "Order book",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["DeFi"],
-      "childrenNames": ["prediction-market"],
+      "childrenNames": [],
       "description": ""
     },
     {
@@ -533,7 +544,7 @@
       "name": "prediction-market",
       "label": "Prediction market",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
-      "tags": ["DeFi"],
+      "tags": ["General", "DeFi"],
       "description": ""
     },
     {
