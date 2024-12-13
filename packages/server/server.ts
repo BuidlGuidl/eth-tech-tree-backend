@@ -13,7 +13,7 @@ import {
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission } from "./services/user";
 import { parseTestResults } from "./utils/parseTestResults";
-
+import { getLeaderboard } from "./services/leaderboard";
 export const startServer = async () => {
   const app: Express = express();
   app.use(cors());
@@ -96,10 +96,13 @@ export const startServer = async () => {
               const timeDifference = currentTime - submissionTime.getTime();
               const timeDifferenceInSeconds = timeDifference / 1000;
               if (timeDifferenceInSeconds < 180) {
+                console.log(`Challenge is taking awhile to move out of pending state. It has been ${timeDifferenceInSeconds} seconds since the submission was made.`)
                 // TODO: Need to notify the team that things are running slow or seized and causing issues
               }
+            } else if (challengeStatus?.status === "success") {
+              // If this specific contract has already been run by someone and succeeded, we don't need to run the tests again
+              return res.status(400).json({ error: `Challenge has already been submitted and has a ${challengeStatus?.status} state` });
             }
-            return res.status(400).json({ error: `Challenge has already been submitted and has a ${challengeStatus?.status} state` });
           }
         }
         // Update the user's submission status to pending
@@ -115,18 +118,36 @@ export const startServer = async () => {
         // Update the user's submission status to success or failed
         const status = parsedTestResults.passed ? "success" : "failed";
         const gasReport = parsedTestResults.gasReport;
-        await updateUserChallengeSubmission(userAddress, challengeName, contractAddress, network, status, gasReport);
+        const error = parsedTestResults.error;
+        await updateUserChallengeSubmission(userAddress, challengeName, contractAddress, network, status, gasReport, error);
         return res.json({ result: parsedTestResults });
       } catch (e) {
         console.error(e);
         if (e instanceof Error) {
           return res.status(500).json({ error: e.message });
         } else {
-          return res.status(500).json({ error: "Unexpected error occurred" });
+          return res.status(500).json({ error: "Unexpected error occurred:" + e });
         }
       }
     }
   );
+
+  /**
+   * Fetch the leaderboard data
+   */
+  app.get("/leaderboard", async (req: Request, res: Response) => {
+    try {
+      const leaderboard = await getLeaderboard();
+      return res.json({ leaderboard });
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        return res.status(500).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: "Unexpected error occurred" });
+      }
+    }
+  });
 
   // Start server
   if (fs.existsSync("server.key") && fs.existsSync("server.cert") && fs.existsSync("server.ca")) {

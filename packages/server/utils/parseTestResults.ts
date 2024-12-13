@@ -11,6 +11,7 @@ interface TestResult {
     passingTests: Record<string, TestResult>;
     failingTests: Record<string, TestResult>;
     gasReport: IGasReport[];
+    error?: string;
   }
   
   export const parseTestResults = (output: string): ParsedResults => {
@@ -45,9 +46,18 @@ interface TestResult {
         gasUsage[testName] = testResult.gas;
       }
     }
+
+    // If there are no passing or failing tests, there was an error
+    if (Object.keys(results.failingTests).length === 0 && Object.keys(results.passingTests).length === 0) {
+      results.error = output;
+      console.log("Error occurred during test execution");
+      console.error(output);
+      return results;
+    }
   
     if (Object.keys(results.failingTests).length === 0) {
       results.passed = true;
+      console.log("🟢 Passed all tests");
       // Process gas usage for each test
       for (const testName in gasUsage) {
         results.gasReport.push({ functionName: testName, gasUsed: gasUsage[testName] });
