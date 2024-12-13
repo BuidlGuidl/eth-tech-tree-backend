@@ -82,10 +82,10 @@ export const testChallengeSubmission = async (config: SubmissionConfig) => {
     const path = `${__dirname}/../challenges/${challenge.name}`;
     const contractPath = `download-${contractAddress}.sol`;
     const testCommand = `cd ${path} && CONTRACT_PATH="${contractPath}" yarn foundry:test`;
-    const { stdout } = await execute(testCommand);
+    const { stdout, stderr } = await execute(testCommand);
     const removeContractCommand = `rm -f ${path}/packages/foundry/contracts/download-${contractAddress}.sol`;
     execute(removeContractCommand);
-    return stdout;
+    return { stdout, stderr };
   } catch (e) {
     console.error("Something went wrong", JSON.stringify(e), "\n");
     throw e;

@@ -113,8 +113,12 @@ export const startServer = async () => {
         // Download the contract
         await downloadContract(submissionConfig);
         // Test the challenge submission
-        const result = await testChallengeSubmission(submissionConfig);
-        const parsedTestResults = parseTestResults(result);
+        const { stdout, stderr } = await testChallengeSubmission(submissionConfig);
+        if (stderr) {
+          console.error(stderr);
+          throw new Error("Error running tests: " + stderr);
+        }
+        const parsedTestResults = parseTestResults(stdout);
         // Update the user's submission status to success or failed
         const status = parsedTestResults.passed ? "success" : "failed";
         const gasReport = parsedTestResults.gasReport;
