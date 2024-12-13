@@ -13,6 +13,7 @@ export interface IUserChallenge {
   contractAddress: string;
   network: string;
   gasReport?: IGasReport[];
+  error?: string;
 }
 
 export interface IUser {
@@ -21,6 +22,8 @@ export interface IUser {
   creationDate: Date;
   challenges: IUserChallenge[];
   installLocations?: IInstallLocation[];
+  totalGasUsed?: number;
+  points?: number;
 }
 
 export interface IInstallLocation {
@@ -68,7 +71,7 @@ const UserChallengeSchema = new Schema<IUserChallenge>({
   timestamp: {
     type: Date,
     required: true,
-    default: Date.now(),
+    default: () => new Date(),
   },
   contractAddress: {
     type: String,
@@ -79,6 +82,10 @@ const UserChallengeSchema = new Schema<IUserChallenge>({
     required: true,
   },
   gasReport: [GasReportSchema],
+  error: {
+    type: String,
+    required: false,
+  },
 }, { _id: false });
 
 const UserSchema = new Schema<IUser, IUserModel>({
@@ -90,10 +97,18 @@ const UserSchema = new Schema<IUser, IUserModel>({
   creationDate: {
     type: Date,
     required: true,
-    default: Date.now(),
+    default: () => new Date(),
   },
   challenges: [UserChallengeSchema],
   installLocations: [InstallLocationSchema],
+  totalGasUsed: {
+    type: Number,
+    default: 0,
+  },
+  points: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const User = (mongoose.models.User as IUserModel) || mongoose.model<IUser, IUserModel>("User", UserSchema);
