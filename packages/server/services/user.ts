@@ -12,6 +12,14 @@ export const fetchUser = async (
   await dbConnect();
   // Fetch user by address or ENS name
   const user = await User.findOne({ $or: [{ address: identifier }, { ens: identifier }] }, "-_id -__v");
+  // If user has no ENS name set, try to resolve it
+  if (user && !user.ens) {
+    user.ens = await getEnsName(user.address) as string;
+    // If successful, update the user
+    if (user.ens) {
+      await User.findOneAndUpdate({ address: user.address }, user, { upsert: true });
+    }
+  }
 
   return (user?.toObject() || {}) as IUser;
 };
