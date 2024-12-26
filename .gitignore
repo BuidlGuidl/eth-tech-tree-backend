@@ -14,6 +14,4 @@ node_modules
 !.yarn/versions
 .eslintcache
 
-server.key
-server.cert
-server.ca
+sslcerts/*
