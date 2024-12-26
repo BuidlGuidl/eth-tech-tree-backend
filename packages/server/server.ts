@@ -8,7 +8,9 @@ import {
   testChallengeSubmission,
   PORT,
   validateIdentifier,
-  validateNewUser
+  validateNewUser,
+  SERVER_CERT,
+  SERVER_KEY,
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission } from "./services/user";
@@ -154,14 +156,13 @@ export const startServer = async () => {
   });
 
   // Start server
-  if (fs.existsSync("server.key") && fs.existsSync("server.cert") && fs.existsSync("server.ca")) {
+  if (fs.existsSync(SERVER_KEY) && fs.existsSync(SERVER_CERT)) {
     console.log("Starting server with HTTPS");
     https
       .createServer(
         {
-          key: fs.readFileSync("server.key"),
-          cert: fs.readFileSync("server.cert"),
-          ca: fs.readFileSync("server.ca"),
+          key: fs.readFileSync(SERVER_KEY),
+          cert: fs.readFileSync(SERVER_CERT),
         },
         app
       )
