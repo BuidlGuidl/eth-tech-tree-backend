@@ -487,8 +487,8 @@
       "label": "Social Recovery",
       "repo": "https://github.com/BuidlGuidl/eth-tech-tree-challenges",
       "tags": ["Wallets"],
-      "contractName": "SocialRecovery.sol",
-      "testFileName": "SocialRecovery.t.sol",
+      "contractName": "SocialRecoveryWallet.sol",
+      "testFileName": "SocialRecoveryWallet.t.sol",
       "childrenNames": ["multisig"],
       "enabled": true,
       "description": "In this challenge, you will develop a social recovery wallet that provides a user-friendly solution for securely managing a wallet without fear of losing access permanently. Inspired by the need for resilience, the wallet will allow users to select a group of trusted guardian addresses. In the event that the seed phrase is lost, these guardians can collaborate to recover access to the wallet while maintaining the user's autonomy. The challenge focuses on implementing this innovative recovery mechanism using smart contract logic, enhancing security and usability for cryptocurrency holders."
