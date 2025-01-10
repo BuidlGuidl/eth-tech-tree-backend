@@ -80,7 +80,8 @@ export const testChallengeSubmission = async (config: SubmissionConfig) => {
   try {
     console.log("🧪 Testing challenge submission...");
     const path = `${__dirname}/../challenges/${challenge.name}`;
-    const contractPath = `download-${contractAddress}.sol`;
+    const contractName = challenge.contractName.replace(".sol", "");
+    const contractPath = `download-${contractAddress}.sol:${contractName}`;
     const testCommand = `cd ${path} && CONTRACT_PATH="${contractPath}" yarn foundry:test`;
     const { stdout, stderr } = await execute(testCommand);
     const removeContractCommand = `rm -f ${path}/packages/foundry/contracts/download-${contractAddress}.sol`;
