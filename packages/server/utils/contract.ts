@@ -57,7 +57,7 @@ export const downloadContract = async (
 
     if (!sourceCodeParsed) {
       throw new Error(
-        `Contract Source Code is not valid. Are you submitting ${challenge.contractName} Contract Address?`
+        `Contract Source Code is not valid. Are you sure you are submitting the ${challenge.contractName} contract address?`
       );
     }
     const path = `${__dirname}/../challenges/${challenge.name}`;
