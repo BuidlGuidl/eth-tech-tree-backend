@@ -11,6 +11,7 @@ import {
   validateNewUser,
   SERVER_CERT,
   SERVER_KEY,
+  SKIP_TEST_EXISTS_CHECK,
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission } from "./services/user";
@@ -84,6 +85,7 @@ export const startServer = async () => {
       const { network, contractAddress, challengeName, userAddress } = req.body;
       try {
         // Verify that no other submission exists for that contract address
+        if (!SKIP_TEST_EXISTS_CHECK) {
         const userWithExistingSubmission = await fetchUserWithChallengeAtAddress(contractAddress);
         if (userWithExistingSubmission) {
           const challengeStatus = userWithExistingSubmission.challenges.find(item => item.contractAddress === contractAddress);
@@ -107,6 +109,7 @@ export const startServer = async () => {
             }
           }
         }
+      }
         // Update the user's submission status to pending
         await updateUserChallengeSubmission(userAddress, challengeName, contractAddress, network, "pending");
         // Fetch the challenge metadata
@@ -116,11 +119,11 @@ export const startServer = async () => {
         await downloadContract(submissionConfig);
         // Test the challenge submission
         const { stdout, stderr } = await testChallengeSubmission(submissionConfig);
-        if (stderr) {
+        if (stderr && !stderr.includes("Debugger attached.\nDebugger attached.\n")) {
           console.error(stderr);
           throw new Error("Error running tests: " + stderr);
         }
-        const parsedTestResults = parseTestResults(stdout);
+        const parsedTestResults = parseTestResults(submissionConfig, stdout);
         // Update the user's submission status to success or failed
         const status = parsedTestResults.passed ? "success" : "failed";
         const gasReport = parsedTestResults.gasReport;
@@ -154,7 +157,9 @@ export const startServer = async () => {
       }
     }
   });
-
+  if (SKIP_TEST_EXISTS_CHECK) {
+    console.log("WARN: Set up to skip the test exists check");
+  }
   // Start server
   if (fs.existsSync(SERVER_KEY) && fs.existsSync(SERVER_CERT)) {
     console.log("Starting server with HTTPS");

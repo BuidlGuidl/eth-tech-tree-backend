@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
-import {  execute } from "./utils";
+import { execa } from "execa";
+import {  EXTENSION_REPO } from "./utils";
 import { fetchChallenges } from "./services/challenge";
 import { type IChallenge } from "./mongodb/models/challenges";
 
@@ -18,8 +19,12 @@ const setupChallenge = async (challenge: IChallenge): Promise<void> => {
 
     if (!exists) {
       console.log(`👯...Setting up ${challenge.name}...👯`);
-      const setupChallengeCommand = `npx --yes eth-tech-tree@latest setup ${challenge.name} ${challengesDirectory}`;
-      await execute(setupChallengeCommand);
+      const extensionSource = `${EXTENSION_REPO}:${challenge.name}-extension`;
+      await execa("create-eth", ["-e", extensionSource, challenge.name], { stdio: "inherit", cwd: challengesDirectory });
+      console.log("Copying over default contract");
+      const defaultContractPath = `${path}/packages/foundry/contracts/${challenge.contractName}`;
+      const extraContractPath = `${path}/packages/foundry/extra/I${challenge.contractName}`;
+      await fs.copyFile(extraContractPath, defaultContractPath);
       console.log(`Removing NextJS directory from ${challenge.name}`);
       await fs.rm(`${path}/packages/nextjs`, { recursive: true });
     }
