@@ -12,6 +12,7 @@ import {
   SERVER_CERT,
   SERVER_KEY,
   SKIP_TEST_EXISTS_CHECK,
+  trackPlausibleEvent,
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission } from "./services/user";
@@ -62,7 +63,11 @@ export const startServer = async () => {
     const { address, ens, device, location } = req.body;
     try {
       // Create a new user
-      const user = await createUser(address, ens, device, location);
+      const { isNew, user } = await createUser(address, ens, device, location);
+      if (isNew) {
+        // Track the new user event
+        trackPlausibleEvent("NewUser", {}, req);
+      }
       return res.json({ user });
     } catch (e) {
       console.error(e);
@@ -86,30 +91,31 @@ export const startServer = async () => {
       try {
         // Verify that no other submission exists for that contract address
         if (!SKIP_TEST_EXISTS_CHECK) {
-        const userWithExistingSubmission = await fetchUserWithChallengeAtAddress(contractAddress);
-        if (userWithExistingSubmission) {
-          const challengeStatus = userWithExistingSubmission.challenges.find(item => item.contractAddress === contractAddress);
-          if (userWithExistingSubmission.address !== userAddress) {
-            // Potentially malicious user trying to submit a challenge from/for another user
-            return res.status(400).json({ error: "Submission already exists for this contract address" });
-          } else {
-            if (challengeStatus?.status === "pending") {
-              // Calculate the time since the submission was made
-              const currentTime = Date.now();
-              const submissionTime = challengeStatus.timestamp;
-              const timeDifference = currentTime - submissionTime.getTime();
-              const timeDifferenceInSeconds = timeDifference / 1000;
-              if (timeDifferenceInSeconds < 180) {
-                console.log(`Challenge is taking awhile to move out of pending state. It has been ${timeDifferenceInSeconds} seconds since the submission was made.`)
-                // TODO: Need to notify the team that things are running slow or seized and causing issues
+          const userWithExistingSubmission = await fetchUserWithChallengeAtAddress(contractAddress);
+          if (userWithExistingSubmission) {
+            const challengeStatus = userWithExistingSubmission.challenges.find(item => item.contractAddress === contractAddress);
+            if (userWithExistingSubmission.address !== userAddress) {
+              // Potentially malicious user trying to submit a challenge from/for another user
+              return res.status(400).json({ error: "Submission already exists for this contract address" });
+            } else {
+              if (challengeStatus?.status === "pending") {
+                // Calculate the time since the submission was made
+                const currentTime = Date.now();
+                const submissionTime = challengeStatus.timestamp;
+                const timeDifference = currentTime - submissionTime.getTime();
+                const timeDifferenceInSeconds = timeDifference / 1000;
+                if (timeDifferenceInSeconds < 180) {
+                  console.log(`Challenge is taking awhile to move out of pending state. It has been ${timeDifferenceInSeconds} seconds since the submission was made.`)
+                  // TODO: Need to notify the team that things are running slow or seized and causing issues
+                }
+              } else if (challengeStatus?.status === "success") {
+                // If this specific contract has already been run by someone and succeeded, we don't need to run the tests again
+                return res.status(400).json({ error: `Challenge has already been submitted and has a ${challengeStatus?.status} state` });
               }
-            } else if (challengeStatus?.status === "success") {
-              // If this specific contract has already been run by someone and succeeded, we don't need to run the tests again
-              return res.status(400).json({ error: `Challenge has already been submitted and has a ${challengeStatus?.status} state` });
             }
           }
         }
-      }
+        trackPlausibleEvent("ChallengeSubmission", { network, challengeName }, req);
         // Update the user's submission status to pending
         await updateUserChallengeSubmission(userAddress, challengeName, contractAddress, network, "pending");
         // Fetch the challenge metadata
