@@ -42,7 +42,7 @@ export const createUser = async (
   ens: string,
   device: string,
   location: string
-): Promise<IUser> => {
+): Promise<{ isNew: boolean; user: IUser }> => {
   await dbConnect();
   if (!address) {
     address = (await getEnsAddress(ens)) as string;
@@ -54,9 +54,10 @@ export const createUser = async (
     ens = await getEnsName(address) as string;
   }
   const installLocations = { location, device };
-  await User.findOneAndUpdate({ address }, { address, ens, $push: { installLocations } }, { upsert: true });
+  const doc = await User.findOneAndUpdate({ address }, { address, ens, $push: { installLocations } }, { upsert: true });
+  const isNew = !!doc?.isNew;
   const user = await User.findOne({ address }, "-_id -__v");
-  return user as IUser;
+  return { isNew, user: user as IUser };
 }
 
 /**
