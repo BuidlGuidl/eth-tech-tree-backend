@@ -5,9 +5,9 @@ const PLAUSIBLE_EVENT_ENDPOINT = "https://plausible.io/api/event";
 
 export const trackPlausibleEvent = async (eventName: string, props: {}, request: Request ) => {
   const payload = {
-    domain: "api.ethtechtree.com",
+    domain: "ethtechtree.com",
     name: eventName,
-    url: "https://api.ethtechtree.com",
+    url: "https://ethtechtree.com/api",
     props,
   };
 
