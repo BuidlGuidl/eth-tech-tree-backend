@@ -54,8 +54,10 @@ export const createUser = async (
     ens = await getEnsName(address) as string;
   }
   const installLocations = { location, device };
+  // This returns the document before the update
   const doc = await User.findOneAndUpdate({ address }, { address, ens, $push: { installLocations } }, { upsert: true });
-  const isNew = !!doc?.isNew;
+  // If it is null then this user was created for the first time
+  const isNew = !doc;
   const user = await User.findOne({ address }, "-_id -__v");
   return { isNew, user: user as IUser };
 }
