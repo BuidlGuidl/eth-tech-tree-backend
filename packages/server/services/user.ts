@@ -120,3 +120,13 @@ export const calculatePoints = (completedChallenges: IChallenge[]): number => {
       return total + points;
     }, 0);
 };
+
+/**
+ * Fetch all users
+ */
+export const fetchAllUsers = async (): Promise<IUser[]> => {
+  await dbConnect();
+  // Fetch all users
+  const users = await User.find({}, "-_id -__v -installLocations");
+  return users.map(user => user.toObject()) as IUser[];
+};
