@@ -15,7 +15,7 @@ import {
   trackPlausibleEvent,
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
-import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission } from "./services/user";
+import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission, fetchAllUsers } from "./services/user";
 import { parseTestResults } from "./utils/parseTestResults";
 import { getLeaderboard } from "./services/leaderboard";
 export const startServer = async () => {
@@ -146,6 +146,24 @@ export const startServer = async () => {
       }
     }
   );
+
+  /**
+   * Fetch all users
+   */
+  app.get("/users", async (req: Request, res: Response) => {
+    console.log("GET /users");
+    try {
+      const users = await fetchAllUsers();
+      return res.json({ users });
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        return res.status(500).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: "Unexpected error occurred" });
+      }
+    }
+  });
 
   /**
    * Fetch the leaderboard data
