@@ -30,8 +30,8 @@ export const validateChallengeSubmission = [
 ];
 
 export const validateNewUser = [
-  body("address").optional().isEthereumAddress().withMessage("Invalid Ethereum address"),
-  body("ens").optional().isString().withMessage("Invalid ENS name"),
+  body("address").optional({ nullable: true }).isEthereumAddress().withMessage("Invalid Ethereum address"),
+  body("ens").optional({ nullable: true }).isString().withMessage("Invalid ENS name"),
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
