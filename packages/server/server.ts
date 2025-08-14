@@ -13,6 +13,7 @@ import {
   SERVER_KEY,
   SKIP_TEST_EXISTS_CHECK,
   trackPlausibleEvent,
+  SUPPORTED_CHAINS,
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission, fetchAllUsers } from "./services/user";
@@ -34,6 +35,13 @@ export const startServer = async () => {
   app.get("/challenges", async (req: Request, res: Response) => {
     const challenges = await fetchChallenges();
     return res.json({ challenges });
+  });
+
+  /**
+   * Fetch all supported testnets
+   */
+  app.get("/testnets", async (_req: Request, res: Response) => {
+    return res.json({ testnets: SUPPORTED_CHAINS });
   });
 
   /**
@@ -87,7 +95,7 @@ export const startServer = async () => {
     validateChallengeSubmission,
     async function (req: Request, res: Response) {
       console.log("POST /submit \n", req.body);
-      const { network, contractAddress, challengeName, userAddress } = req.body;
+      const { contractAddress, challengeName, userAddress } = req.body;
       try {
         // Verify that no other submission exists for that contract address
         if (!SKIP_TEST_EXISTS_CHECK) {
@@ -115,14 +123,14 @@ export const startServer = async () => {
             }
           }
         }
-        trackPlausibleEvent("ChallengeSubmission", { network, challengeName }, req);
-        // Update the user's submission status to pending
-        await updateUserChallengeSubmission(userAddress, challengeName, contractAddress, network, "pending");
         // Fetch the challenge metadata
         const challenge = await fetchChallenge(challengeName);
-        const submissionConfig = { challenge, network, contractAddress };
+        const submissionConfig = { challenge, contractAddress };
         // Download the contract
-        await downloadContract(submissionConfig);
+        const { network } = await downloadContract(submissionConfig);
+        trackPlausibleEvent("ChallengeSubmission", { network, challengeName }, req);
+        // Update the user's submission status to pending now that we know the network
+        await updateUserChallengeSubmission(userAddress, challengeName, contractAddress, network, "pending");
         // Test the challenge submission
         const { stdout, stderr } = await testChallengeSubmission(submissionConfig);
         if (stderr && !stderr.includes("Debugger attached.\nDebugger attached.\n")) {
