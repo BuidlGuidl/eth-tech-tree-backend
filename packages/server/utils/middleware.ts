@@ -17,9 +17,9 @@ export const validateChallengeSubmission = [
       throw new Error(`Challenge "${slug}" not found.`);
     }
   }),
-  body("network").isIn(ALLOWED_NETWORKS).withMessage("Invalid network name"),
   body("contractAddress").isEthereumAddress().withMessage("Invalid Ethereum contract address"),
   body("userAddress").isEthereumAddress().withMessage("Invalid Ethereum user address"),
+  // No network validation: the backend will discover the correct network/chainId
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

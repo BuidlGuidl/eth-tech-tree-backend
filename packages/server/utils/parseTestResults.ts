@@ -73,6 +73,8 @@ const parseTestOutput = (output: string): PassFailResults => {
   if (Object.keys(results.failingTests).length === 0) {
     results.passed = true;
     console.log("🟢 Passed all tests");
+  } else {
+    console.log("🔴 Failed some tests");
   }
 
   return results;
