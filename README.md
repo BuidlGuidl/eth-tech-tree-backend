@@ -75,6 +75,7 @@ Before you begin, you need to install the following tools:
 - GET `/users` → List users (summary)
 - GET `/user/:identifier` → Fetch user by address or ENS
 - GET `/leaderboard` → Leaderboard data
+- GET `/ens/:name` → Fetch address from ENS if it can be resolved
 - GET `/testnets` → Supported testnets configured on the server
 - POST `/submit` → Submit a challenge run
 
