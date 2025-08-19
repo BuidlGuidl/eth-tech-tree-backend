@@ -16,6 +16,7 @@ import {
   SUPPORTED_CHAINS,
 } from "./utils";
 import { fetchChallenge, fetchChallenges } from "./services/challenge";
+import { getEnsAddress } from "./services/ens";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission, fetchAllUsers } from "./services/user";
 import { parseTestResults } from "./utils/parseTestResults";
 import { getLeaderboard } from "./services/leaderboard";
@@ -189,6 +190,26 @@ export const startServer = async () => {
       }
     }
   });
+
+  /**
+   * Resolve an ENS name to an address
+   */
+  app.get("/ens/:name", async (req: Request, res: Response) => {
+    console.log("GET /ens/:name \n", req.params);
+    const ensName = req.params.name;
+    try {
+      const address = await getEnsAddress(ensName);
+      return res.json({ address });
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        return res.status(500).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: "Unexpected error occurred" });
+      }
+    }
+  });
+
   if (SKIP_TEST_EXISTS_CHECK) {
     console.log("WARN: Set up to skip the test exists check");
   }
