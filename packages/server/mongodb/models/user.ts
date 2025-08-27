@@ -24,6 +24,7 @@ export interface IUser {
   installLocations?: IInstallLocation[];
   totalGasUsed?: number;
   points?: number;
+  nonce: number;
 }
 
 export interface IInstallLocation {
@@ -108,6 +109,10 @@ const UserSchema = new Schema<IUser, IUserModel>({
   points: {
     type: Number,
     default: 0,
+  },
+  nonce: {
+    type: Number,
+    default: 1,
   },
 });
 
