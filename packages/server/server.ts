@@ -20,6 +20,7 @@ import { getEnsAddress } from "./services/ens";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission, fetchAllUsers } from "./services/user";
 import { parseTestResults } from "./utils/parseTestResults";
 import { getLeaderboard } from "./services/leaderboard";
+import { createAuthMessage } from "./utils/auth";
 export const startServer = async () => {
   const app: Express = express();
   app.use(cors());
@@ -200,6 +201,28 @@ export const startServer = async () => {
     try {
       const address = await getEnsAddress(ensName);
       return res.json({ address });
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        return res.status(500).json({ error: e.message });
+      } else {
+        return res.status(500).json({ error: "Unexpected error occurred" });
+      }
+    }
+  });
+
+  app.get("/message/:userAddress", async (req: Request, res: Response) => {
+    console.log("GET /message/:userAddress \n", req.params);
+    const { userAddress } = req.params;
+    try {
+      const user = await fetchUser(userAddress);
+      if (!user || !user.address) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const currentNonce = user.nonce || 1;
+      const authMessage = createAuthMessage(currentNonce);
+      return res.json({ message: authMessage });
     } catch (e) {
       console.error(e);
       if (e instanceof Error) {
