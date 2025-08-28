@@ -685,7 +685,6 @@
       "address": "0x60583563D5879C2E59973E5718c7DE2147971807",
       "ens": "carletex.eth",
       "creationTimestamp": 1633088553221,
-      "nonce": 1,
       "challenges": [
         {
           "challengeName": "token-voting",
