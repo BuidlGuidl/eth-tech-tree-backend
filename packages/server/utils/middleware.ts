@@ -1,11 +1,8 @@
 import { body, param, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import { verifyMessage } from "viem";
-import { ALLOWED_NETWORKS } from ".";
 import { fetchChallengeNames } from "../services/challenge";
-import { createAuthMessage } from "./auth";
-import { fetchUser } from "../services/user";
-import User from "../mongodb/models/user";
+import { AUTH_MESSAGE } from "./constants";
 
 const ischallengeName = async (challengeName: string) => {
   const challengeNames = await fetchChallengeNames();
@@ -13,20 +10,10 @@ const ischallengeName = async (challengeName: string) => {
 };
 
 const validateSignature = async (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
   const { userAddress, signature } = req.body;
 
   try {
-    const user = await fetchUser(userAddress);
-    if (!user || !user.address) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const currentNonce = user.nonce || 1;
-    const authMessage = createAuthMessage(currentNonce);
+    const authMessage = AUTH_MESSAGE;
 
     const isValid = await verifyMessage({
       address: userAddress as `0x${string}`,
@@ -38,7 +25,6 @@ const validateSignature = async (req: Request, res: Response, next: NextFunction
       return res.status(401).json({ error: "Invalid signature" });
     }
 
-    await User.updateOne({ address: userAddress }, { $inc: { nonce: 1 } });
   } catch (error) {
     console.error("Signature verification error:", error);
     return res.status(401).json({ error: "Signature verification failed" });
