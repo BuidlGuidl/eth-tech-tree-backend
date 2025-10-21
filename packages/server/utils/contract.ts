@@ -68,10 +68,12 @@ const parseSourceCode = (sourceCode: string, challenge: any) => {
       // Option 2. An almost valid JSON
       // Remove the initial and final { }
       const validJson = JSON.parse(sourceCode.substring(1).slice(0, -1));
-      return (
-        validJson?.sources[`contracts/${challenge.contractName}`]?.content ??
-        validJson?.sources[`./contracts/${challenge.contractName}`]?.content
-      );
+      const sources = validJson?.sources ?? {};
+      const contractFile = challenge.contractName;
+      const escaped = contractFile.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const pattern = new RegExp(`(?:^|[\\\\/])${escaped}$`);
+      const matchedKey = Object.keys(sources).find((key) => pattern.test(key));
+      return matchedKey ? sources[matchedKey]?.content : undefined;
     } else {
       // Option 1. A string
       return sourceCode;
