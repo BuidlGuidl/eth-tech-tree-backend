@@ -20,6 +20,7 @@ import { getEnsAddress } from "./services/ens";
 import { fetchUserWithChallengeAtAddress, fetchUser, createUser, updateUserChallengeSubmission, fetchAllUsers } from "./services/user";
 import { parseTestResults } from "./utils/parseTestResults";
 import { getLeaderboard } from "./services/leaderboard";
+import { AUTH_MESSAGE } from "./utils/constants";
 export const startServer = async () => {
   const app: Express = express();
   app.use(cors());
@@ -208,6 +209,10 @@ export const startServer = async () => {
         return res.status(500).json({ error: "Unexpected error occurred" });
       }
     }
+  });
+
+  app.get("/message", async (_req: Request, res: Response) => {
+    return res.json({ message: AUTH_MESSAGE });
   });
 
   if (SKIP_TEST_EXISTS_CHECK) {
